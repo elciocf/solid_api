@@ -1,0 +1,187 @@
+mkdir projeto
+cd projeto
+
+yarn init -y
+
+yarn add typescript -D
+
+//inicializar o typescript
+yarn tsc --init
+
+//alterar no arquivo tsconfig.json (remover comentário)
+"outDir": "./dist",
+"strict": false
+"resolveJsonModule": true
+"strictPropertyInitialization": false, 
+
+//ajustar paths para facilitar a importação
+"baseUrl": "./src",                               
+"paths": {
+        "@modules/*": ["modules/*"],
+        "@config/*": ["config/*"],
+        "@shared/*": ["shared/*"],
+        "@errors/*": ["errors/*"],
+}, 
+
+
+//para utilizar o path com @ será necessário instalar tsconfig-paths
+
+yarn add tsconfig-paths -D
+
+
+
+
+
+yarn add express
+yarn add @types/express -D
+
+/****
+instalar o ESLint no VSCode
+
+***/
+
+yarn add eslint -D
+yarn eslint --init
+   To check syntax, find problems and enforce code style
+   Javascript modules (import/export)
+   None of these
+   Yes
+   Apenas node (spacebar on browser)
+   Use a popular style guide
+   AirBnb
+   JSON
+   Yes
+
+
+yarn add -D eslint-plugin-import-helpers eslint-import-resolver-typescript
+
+/** criar arquivo .eslintignore na pasta raiz**/
+conteudo:
+
+/*.js
+node_modules
+dist
+
+/** ajustar o .eslintrc.json **/
+
+dentro de "env" >  add "jest": true
+dentro de "extends" > add "plugin:@typescript-eslint/recommended"
+dentro de "plugins" > add "eslint-plugin-import-helpers"
+
+dentro de "rules" > add
+
+"camelcase": "off",
+"import/no-unresolved": "error",
+"@typescript-eslint/naming-convention": [
+  "error",
+  {
+    "selector": "interface",
+    "format": ["PascalCase"],
+    "custom": {
+      "regex": "^I[A-Z]",
+      "match": true
+    }
+  }
+],
+"class-methods-use-this": "off",
+"import/prefer-default-export": "off",
+"no-shadow": "off",
+"no-console": "off",
+"no-useless-constructor": "off",
+"no-empty-function": "off",
+"lines-between-class-members": "off",
+"import/extensions": [
+  "error",
+  "ignorePackages",
+  {
+    "ts": "never"
+  }
+],
+"import-helpers/order-imports": [
+  "warn",
+  {
+    "newlinesBetween": "always",
+    "groups": ["module", "/^@/", ["parent", "sibling", "index"]],
+    "alphabetize": { "order": "asc", "ignoreCase": true }
+  }
+],
+"import/no-extraneous-dependencies": [
+  "error",
+  { "devDependencies": ["**/*.spec.js"] }
+]
+
+
+/***depois de rules add **/
+"settings": {
+        "import/resolver": {
+          "typescript": {}
+        }
+    }
+
+---reiniciar o vscode
+
+
+/** instalar o prettier **/
+
+yarn add prettier eslint-config-prettier eslint-plugin-prettier -D
+
+/** modificar .eslintrc.json  **/
+
+em "extends" > add 
+"prettier",
+"plugin:prettier/recommended"
+
+em "plugins" > add "prettier"
+
+em "rules" > add "prettier/prettier": "error" 
+
+
+/** para resolver a quebra de linha windows linux **/
+instalamos a extensão  "EditorConfig for VS Code"
+
+Direito na pasta raiz dentro do vs code > Generate .editorconfig
+
+
+
+/**** ajustar para gerar o dist automaticamente **** /
+
+yarn add ts-node-dev -D
+
+no package.json criar "scripts"
+
+"scripts" :{
+     "dev" : "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn src/server.ts"
+},
+"dependencies":
+
+
+
+/*** DEBUGAR NODE ****/
+No Vs Code > no canto esquerdo > depurar e debugar > criar arquivo launch.json > opção node
+
+No arquivo mudar para
+
+            "type": "node",
+            "request": "attach",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],            
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+
+e no package.json > add --inspect
+
+"scripts" :{
+     "dev" : "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts"
+  },
+
+agora conseguimos criar breakpoints.. inspect ... etc
+
+
+
+
+**** comandos no VS CODE ****
+
+ctrl + shift + P > Reload 

@@ -1,0 +1,10 @@
+Framework para api com facilitador de conexões entre sistemas ( kafka, websocket )
+
+
+--criar projeto
+
+npx @nestjs/cli new [nome_doprojeto]
+
+escolher o gerenciador de pacotes <enter>
+
+----

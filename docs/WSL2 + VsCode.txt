@@ -1,0 +1,149 @@
+WSL2 - Windows subsystem linux versão 2
+
+
+Suporte a docker, kubernetes e ao padrão de containers
+
+Requisitos:
+windows 10 pro ou home (melhor o pro) 
+windows 10 versão >= 19.03
+memória ram suficiente (8gb ram)
+virtual machine  plataform habilitado
+
+
+Executar o docker no WSL
+
+
+instalar o docker no wsl2
+
+github.com/codeedu/wsl2-docker-quickstart
+
+
+
+//Habilitar o wsl no windows
+
+Execute os seguintes comandos no PowerShell em modo administrador:
+
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+
+Instale o WSL 2 no Windows 10/11
+Baixe o Kernel do WSL 2 neste link: https://docs.microsoft.com/pt-br/windows/wsl/wsl2-kernel e instale o pacote.
+
+
+
+Atribua a versão default do WSL para a versão 2
+A versão 1 do WSL é a padrão no momento, atribua a versão default para a versão 2, assim todas as distribuições Linux instaladas serão já por default da versão 2. Execute o comando com o PowerShell:
+
+wsl --set-default-version 2
+
+--
+instalar linux pela windows store
+definir usuário ao iniciar
+
+--
+fazer sempre ser o root
+
+Open Registry Editor with shortcut key: windows + r.
+
+type: regedit and enter.
+
+Go to this path: HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss
+
+and find the "DistributionName" you are using. (Ubuntu-18.04 is mine) Modify this name "DefaultUid" set value equal 0 then click Ok button to save. then log off and log in to reset Registry.
+
+Open your bash shell and enjoy it.
+
+0 is the root user's id, you can check by running this command cat /etc/passwd; and find root user.
+
+---
+
+
+
+---
+instalar windows terminal pela windows store
+
+alterar as configs > abrir json
+
+                "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+                "hidden": false,
+                "name": "Ubuntu",
+                "source": "Windows.Terminal.Wsl",
+                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\NOME_DO_USUARIO\\"
+
+
+
+---
+configurar recursos do wsl2
+
+criar arquivo  .wslconfig na raiz da sua pasta de usuário (C:\Users\<seu_usuario>)  
+[wsl2]
+memory=8GB
+processors=4
+swap=2GB
+
+
+
+//instalar o docker no ubuntu
+
+sudo apt update && sudo apt upgrade
+
+sudo apt remove docker docker-engine docker.io containerd runc
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+sudo usermod -aG docker $USER
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo service docker start
+
+
+----
+instalar o node no wsl2
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+reiniciar o terminal
+
+nvm install --lts
+
+instalar yarn .. etc
+
+----
+
+abrir pasta no explorer
+
+dentro do terminal do wsl2: explorer.exe .
+
+
+
+
+
+//sempre q rodar o linux - 
+rodar o comando ( senha 742311 )
+sudo service docker start
+
+
+
+
+
+
+--- configurar o vscode ----
+

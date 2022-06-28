@@ -1,0 +1,161 @@
+Interface entre javascript e banco de dados
+
+yarn add typeorm 
+yarn add reflect-metadata
+
+yarn add <driver do BD>
+ex: yarn add mysql.. yarn add pg (pr é postgreesql)
+
+**Ajustar o tsconfig.json **
+habilitar
+"experimentalDecorators": true, 
+"emitDecoratorMetadata": true,  
+
+*** parametros da conexão ****
+
+criar ormconfig.json na raiz do projeto
+
+{
+    "type": "postgres",
+    "host": "localhost",
+    "username": "",
+    "password": "",
+    "database": "rentx"
+}
+
+
+
+*** src/database/index.ts ***
+// no server.ts import "./database"
+
+import { createConnection, getConnectionOptions } from "typeorm";
+
+interface IOptions {
+    host: string;
+}
+
+getConnectionOptions().then((options) => {
+    const newOptions = options as IOptions;
+    newOptions.host = "database";
+    createConnection({
+        ...options,
+    });
+});
+
+
+*** migrations ****
+
+Add no package.json em scripts
+
+  "scripts": {
+    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn --poll src/server.ts",
+    "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli"
+  },
+
+
+Add no ormconfig.json
+
+    "cli": {
+        "migrationsDir": "./src/database/migrations"
+    }
+
+
+** criar uma migration ***
+no console
+
+yarn typeorm migrations:create -n <nome>
+yarn typeorm migrations:create -n CreateCategories
+
+
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
+
+export class CreateCategories1654127090037 implements MigrationInterface {
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.createTable(
+            new Table({
+                name: "categories",
+                columns: [
+                    {
+                        name: "id",
+                        type: "uuid",
+                    },
+                    {
+                        name: "name",
+                        type: "varchar",
+                    },
+                    {
+                        name: "description",
+                        type: "varchar",
+                    },
+                    {
+                        name: "created_at",
+                        type: "timestamp",
+                        default: "now()",
+                    },
+                ],
+            })
+        );
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable("categories");
+    }
+}
+
+
+
+** rodar migration ***
+add no ormconfig
+"migrations": ["./src/database/migrations/*.ts"],
+"entities": ["./src/modules/**/entities/*.ts"],
+
+console
+yarn typeorm migration:run
+
+** desfazer migration **
+yarn typeorm migration:revert
+
+
+** referenciar entidades ***
+import { Entity, PrimaryColumn } from "typeorm";
+import { v4 as uuidV4 } from "uuid";
+
+@Entity("categories")
+class Category {
+    @PrimaryColumn()
+    id?: string;
+
+    @Column("NOME_NO_BD_CASO_DIFERENTE")
+    name: string;
+
+    @Column()
+    description: string;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    constructor() {
+        if (!this.id) {
+            this.id = uuidV4();
+        }
+    }
+}
+
+export { Category };
+
+
+**** Criar relação Foreing Key **** 
+
+    @ManyToOne(() => Category)
+    @JoinColumn({ name: "category_id" })
+    category: Category;
+
+    @Column()
+    category_id: string;
+
+
+
+
+
+
+

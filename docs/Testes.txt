@@ -1,0 +1,65 @@
+*** Testes unitários ***
+- Testa regras de negócio
+
+
+
+*** Testes integração ***
+- Testar a aplicação inteira ( fluxo completo )
+
+-> routes -> controllers -> useCases -> repository
+
+
+TDD - metodologia 
+
+Test Driven Development
+
+
+
+** JEST **
+
+yarn add jest @types/jest -D
+yarn add ts-jest -D
+
+yarn jest --init
+
+Sim para criar script test
+Sim para usar typescript
+enter em node
+Não - para coverage reports (mostra o que está sendo testado e o que não)
+enter em v8
+Sim para Clear mock 
+
+*Será criado o arquivo jest.config.ts*
+
+Descomentar a linha //preset e alterar para preset: "ts-jest",
+
+Descomentar testMatch -> definir onde estarão os testes alterar para testMatch: ["**/*.spec.ts"],
+
+Descomentar bail e modificar para bail: true, --> faz parar no primeiro erro
+
+Alterar "baseUrl" para "baseUrl": "."
+
+
+*** Arquivos *.spec.ts ***
+
+// describe agrupa os testes
+describe("Criar categoria", () => {
+    it("Espero que 2 + 2 seja 4", () => {
+        const soma = 2 + 2;
+        const resultado = 4;
+
+        expect(soma).toBe(resultado);
+    });
+
+    it("Espero que 2 + 2 não seja 5", () => {
+        const soma = 2 + 2;
+        const resultado = 5;
+
+        expect(soma).not.toBe(resultado);
+    });
+});
+
+
+
+
+

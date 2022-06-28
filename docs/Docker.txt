@@ -1,0 +1,192 @@
+Para que o restart da aplicação funcione corretamente ao salvar o código, é preciso que o projeto esteja na partição do Linux (WSL).
+
+Para mais informações: https://docs.docker.com/desktop/windows/wsl/#best-practices
+
+Outra alternativa é adicionando a flag --poll no script "dev".
+
+
+via powershell como administrador
+
+wsl --update
+wsl --instal -d Ubuntu
+
+
+---
+Criar dockerfile na pasta raiz do programa
+
+Para descobrir o nome das imagens
+hub.docker.com/search
+
+FROM node
+
+WORKDIR /usr/app
+
+COPY package.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3333
+
+CMD ["npm","run","dev"]
+
+// decifrando //
+FROM node  from image_name (node ... postgres .. etc)
+
+WORKDIR /usr/app   em qual pasta sera criado o container
+
+COPY package.json ./    copiar o package.json para a pasta onde foi criado o container
+
+RUN npm install    após copiar ... executar o npm install
+
+COPY . .    copiar tudo da pasta raiz do projeto para a pasta raiz do container (.dockerignore para filtrar)
+
+EXPOSE 3333  expor a porta em que a aplicação está rodando
+
+CMD ["npm","run","dev"]   comando a ser executado 
+
+
+
+arquivo .dockerignore
+
+node_modules
+.git
+.vscode
+
+
+******** CRIAR A IMAGEM ************
+no terminal... 
+
+docker build -t <nome_imagem> .     o ponto é para indicar em qual pasta está o dockerfile .. no caso ponto é a raiz do projeto
+
+
+***** RODAR A IMAGEM ********
+
+docker run -p PORTAORIGEM:PORTADESTINO
+docker run -p 3333:3333 <nome_da_imagem>
+
+
+**** acessar diretório do container *****
+docker exec -it <nome_do_container> /bin/bash
+** ctrl + D para sair
+
+*** ver containers rodando ****
+docker ps
+
+*** ver containers rodando/não rodando ****
+docker ps -a
+
+*** remover container (container deve estar parado)**** 
+docker rm <id_contianer>
+
+dica: parde do id + <tab> 
+
+**** iniciar container ****
+docker start <id_container>
+
+**** parar container ****
+docker stop <id_container>
+
+
+
+
+*** DOCKER COMPOSE ******
+Orquestrador de containers
+No caso de linux é necessário instalar o docker-compose separadamente
+
+Criar arquivo docker-compose.yml na raiz do projeto
+
+version: "3.9"
+
+services:
+    app:
+        build: .
+        container_name: rentx
+        ports:
+            - 3333:3333
+        volumes:
+            - .:/usr/app   
+
+** é necessário respeitar a identação **
+version: "3.7"
+
+services:
+<tab>app:
+     <tab>build: .
+	  container_name: rentx
+          ports:
+          <tab>- 3333:3333
+          volumes:
+          <tab>- .:/usr/app   
+
+** executar o compose **
+docker-compose up
+
+para hotrealod add --poll no script "dev"
+
+docker-compose up -d  //para rodar em background
+
+** ver log **
+docker logs <nome_container> -f ** sem o F mostra os últimos .. com F monitora o log
+
+ctrl + C para sair
+
+** parar iniciar (apenas após docker-compose up) ***
+docker-compose start
+
+** parar container  ***
+docker-compose stop
+
+** remover container  ***
+docker-compose down
+
+** forçar recriar o container **
+docker-compose up --force-recreat
+
+** obter ip do container ***
+docker exec <container_name> cat /etc/hosts
+
+
+
+**** ADICIONAR CONTAINER DE BANCO DE DADOS *******
+no docker-compose.yml
+
+version: "3.9"
+
+services:
+    database:
+        image: postgres
+        container_name: database_rentx
+        restart: always
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=docker
+            - POSTGRES_PASSWORD=ignite
+            - POSTGRES_DB=rentx   
+        volumes:
+            - pgdata:/data/postgress    
+    app:
+        build: .
+        container_name: rentx
+        ports:
+            - 3333:3333
+            - 9229:9229
+        volumes:
+            - .:/usr/app
+        links:
+            - database
+        depends_on:
+            - database            
+
+volumes:
+    pgdata:
+        driver: local               
+
+
+**** AJUSTAR A COMUNICAÇÃO ENTRE OS CONTAINER *****
+          
+
+
+
