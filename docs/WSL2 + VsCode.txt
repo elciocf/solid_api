@@ -1,65 +1,71 @@
-WSL2 - Windows subsystem linux versão 2
+#WSL2 - Windows subsystem linux versão 2
+
+#Suporte a docker, kubernetes e ao padrão de containers
+
+#Requisitos:
+-windows 10 pro ou home (melhor o pro) 
+-windows 10 versão >= 19.03
+-memória ram suficiente (8gb ram)
+-virtual machine  plataform habilitado
 
 
-Suporte a docker, kubernetes e ao padrão de containers
 
-Requisitos:
-windows 10 pro ou home (melhor o pro) 
-windows 10 versão >= 19.03
-memória ram suficiente (8gb ram)
-virtual machine  plataform habilitado
-
-
-
-//Habilitar o wsl no windows
-
-Execute os seguintes comandos no PowerShell em modo administrador:
+#Habilitar o wsl no windows
+- Execute os seguintes comandos no PowerShell em modo administrador:
 
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
+- Reiniciar o PC
 
-Instale o WSL 2 no Windows 10/11
-Baixe o Kernel do WSL 2 neste link: https://docs.microsoft.com/pt-br/windows/wsl/wsl2-kernel e instale o pacote.
+#Atualizar o wsl para versão 2
+- Execute os seguintes comandos no PowerShell em modo administrador:
 
-
-
-Atribua a versão default do WSL para a versão 2
-A versão 1 do WSL é a padrão no momento, atribua a versão default para a versão 2, assim todas as distribuições Linux instaladas serão já por default da versão 2. Execute o comando com o PowerShell:
-
+wsl.exe --update
 wsl --set-default-version 2
 
---
-instalar linux pela windows store
-definir usuário ao iniciar
+#Instalar o linux
+- instalar linux ubuntu pela windows store (NÃO!!!!!!! abrir pela windows store)
+- Após concluir o download e instalação.. menu iniciar > pesquisar por ubuntu > executar ubuntu como administrador
+- definir usuário e a senha (armazenar em algum local ..txt .. email .. etc)
 
 
----
-instalar windows terminal pela windows store
 
-alterar as configs > abrir json
+#Instalar windows terminal pela windows store
+
+- Alterar para abrir no ubuntu por padrão (caso queira)
+- alterar as do windows terminal configs > "abrir json"
 
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
                 "name": "Ubuntu",
                 "source": "Windows.Terminal.Wsl",
-                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\NOME_DO_USUARIO\\"
+                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\NOME_DO_USUARIO\\"     <===== add/mudar essa linha
 
 
+#Configurar recursos do wsl2
 
----
-configurar recursos do wsl2
+- Criar arquivo  .wslconfig na raiz da sua pasta de usuário (C:\Users\<seu_usuario>):
 
-criar arquivo  .wslconfig na raiz da sua pasta de usuário (C:\Users\<seu_usuario>)  
 [wsl2]
-memory=8GB
+memory=6GB
 processors=4
 swap=2GB
 
+- As configurações podem ser ajustadas conforme a capacidade da sua máquina
+- Após criar o arquivo fechar o terminal do ubuntu .. e no windows PowerShell em modo administrador executar:
 
+wsl --shutdown      <=====  isso finaliza o linux
 
-//instalar o docker no ubuntu
+#instalar o docker no ubuntu
 guia: github.com/codeedu/wsl2-docker-quickstart
+
+- Reabrir o terminal
+- Sempre que reabrir o terminal digite: sudo ls
+- informe a senha .. assim você estará em modo administrativo. (Sempre fazer isso)
+
+- Comandos para instalar o docker no ubuntu (algum tem mais de uma linha. Copiar e colar no windows terminal)
+- Alguns pedem para digitar "Y" .. digite e de enter 
 
 sudo apt update && sudo apt upgrade
 
@@ -76,6 +82,8 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 echo \
   "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+<enter>  
 
 sudo apt-get update
 
@@ -90,29 +98,34 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo service docker start
 
 
-----
-instalar o node no wsl2
+#instalar o node no wsl2
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
-reiniciar o terminal
+- reiniciar o terminal (sudo ls ao abrir!!!)
 
 nvm install --lts
 
-instalar yarn .. etc
+#Instalar o yarn 
 
-----
+npm install yarn -g
 
-abrir pasta no explorer
+- Caso apareça algum aviso de: 
+npm notice New minor version of npm available! 8.11.0 -> 8.13.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v8.13.1
+npm notice Run npm install -g npm@8.13.1 to update!
 
-dentro do terminal do wsl2: explorer.exe .
+Atualize o npm seguindo o comando retornado, nesse caso: 
+npm install -g npm@8.13.1
 
 
+#Abrir pasta referente ao wsl2 no windows explorer
+- dentro do terminal do wsl2:
+explorer.exe .
 
 
-
-//sempre q rodar o linux - 
-rodar o comando ( senha 742311 )
+#Sempre que rodar o linux a primeira vez 
+rodar o comando sudo ls( senha )
 sudo service docker start
 
 
@@ -122,3 +135,4 @@ sudo service docker start
 
 --- configurar o vscode ----
 
+Adicionar a extensão wsl
