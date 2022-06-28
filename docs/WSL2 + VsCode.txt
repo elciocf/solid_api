@@ -10,14 +10,6 @@ memória ram suficiente (8gb ram)
 virtual machine  plataform habilitado
 
 
-Executar o docker no WSL
-
-
-instalar o docker no wsl2
-
-github.com/codeedu/wsl2-docker-quickstart
-
-
 
 //Habilitar o wsl no windows
 
@@ -40,24 +32,6 @@ wsl --set-default-version 2
 --
 instalar linux pela windows store
 definir usuário ao iniciar
-
---
-fazer sempre ser o root
-
-Open Registry Editor with shortcut key: windows + r.
-
-type: regedit and enter.
-
-Go to this path: HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss
-
-and find the "DistributionName" you are using. (Ubuntu-18.04 is mine) Modify this name "DefaultUid" set value equal 0 then click Ok button to save. then log off and log in to reset Registry.
-
-Open your bash shell and enjoy it.
-
-0 is the root user's id, you can check by running this command cat /etc/passwd; and find root user.
-
----
-
 
 
 ---
@@ -85,6 +59,7 @@ swap=2GB
 
 
 //instalar o docker no ubuntu
+guia: github.com/codeedu/wsl2-docker-quickstart
 
 sudo apt update && sudo apt upgrade
 
