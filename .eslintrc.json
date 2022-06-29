@@ -21,7 +21,7 @@
         "prettier"
     ],
     "rules": {    
-        "max-len": ["error", { "code": 120 }],    
+        "max-len": ["error", { "code": 130 }],    
         "camelcase": "off",
         "import/no-unresolved": "error",
         "@typescript-eslint/naming-convention": [

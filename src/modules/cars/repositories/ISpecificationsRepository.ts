@@ -1,14 +1,18 @@
 import { Specification } from "../infra/typeorm/entities/Specification";
 
-interface ICreateSpecificationsDTO {
-    name: string;
-    description: string;
+interface ICreateSpecificationDTO {
+  name: string;
+  description: string;
 }
 
 interface ISpecificationsRepository {
-    findByName(name: string): Promise<Specification>;
-    list(): Promise<Specification[]>;
-    create({ name, description }: ICreateSpecificationsDTO): Promise<void>;
+  findByIds(ids: string[]): Promise<Specification[]>;
+  findByName(name: string): Promise<Specification>;
+  list(): Promise<Specification[]>;
+  create({
+    name,
+    description,
+  }: ICreateSpecificationDTO): Promise<Specification>;
 }
 
-export { ISpecificationsRepository, ICreateSpecificationsDTO };
+export { ISpecificationsRepository, ICreateSpecificationDTO };

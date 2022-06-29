@@ -10,7 +10,7 @@ import { ensureAuthenticate } from "../middlewares/ensureAuthenticated";
 const categoriesRoutes = Router();
 
 const upload = multer({
-    dest: "./tmp",
+  dest: "./tmp",
 });
 
 const createCategoryController = new CreateCategoryController();
@@ -18,20 +18,20 @@ const importCategoryController = new ImportCategoryController();
 const listCategoriesController = new ListCategoriesController();
 
 categoriesRoutes.post(
-    "/",
-    ensureAuthenticate,
-    ensureAdmin,
-    createCategoryController.handle
+  "/",
+  ensureAuthenticate,
+  ensureAdmin,
+  createCategoryController.handle
 );
 
 categoriesRoutes.get("/", listCategoriesController.handle);
 
 categoriesRoutes.post(
-    "/import",
-    ensureAuthenticate,
-    ensureAdmin,
-    upload.single("file"),
-    importCategoryController.handle
+  "/import",
+  ensureAuthenticate,
+  ensureAdmin,
+  upload.single("file"),
+  importCategoryController.handle
 );
 
 export { categoriesRoutes };
