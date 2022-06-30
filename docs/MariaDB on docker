@@ -1,0 +1,17 @@
+No console do wsl2 > Ubuntu
+
+//baixa instalar imagem no Ubuntu
+docker pull mariadb:10.4
+
+//exibir imagens instaladas
+docker images
+
+
+//Criar container do mariaDB (ficara disponível)
+docker run --name mariadb -e MYSQL_ROOT_PASSWORD=admin123 -p 3306:3306 -d docker.io/library/mariadb:10.4
+
+//recordar o password para root
+
+//Fazer com o que o container sempre suba junto com o docker (ao iniciar wsl/ubuntu: sudo service docker start)
+docker update --restart always mariadb
+
