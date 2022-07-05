@@ -3,31 +3,24 @@ No console do wsl2 > Ubuntu
 //baixa instalar imagem no Ubuntu
 docker pull mariadb:10.4
 
-//exibir imagens instaladas
-docker images
-
-
 //Criar container do mariaDB (ficara disponível)
-docker run --name mariadb -e MYSQL_ROOT_PASSWORD=admin123 -p 3306:3306 -d docker.io/library/mariadb:10.4
-docker run --name mariadb -e MYSQL_ROOT_PASSWORD=root123 -p 3306:3306 -d docker.io/library/mariadb:10.4 --add-host=host.docker.internal:host-gateway --restart always
+docker run --name mariadb -e MYSQL_ROOT_PASSWORD=root123 -p 3306:3306 -d mariadb:10.4
 
-//recordar o password para root
+##recordar o password para root##
 
 //Fazer com o que o container sempre suba junto com o docker (ao iniciar wsl/ubuntu: sudo service docker start)
 docker update --restart always mariadb
 
-//Descobrir IP do container do mariadb
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb
 
 //Conectar no console do docker
-docker exec -t mariadb
+docker exec -it mariadb bash
 apt-get update
-apt-get upgrade
 apt-get install nano
 cd /etc/mysql/
 nano my.cnf
 
-==>localizar linha de bindadress remover # e deixar = 0.0.0.0
+==>localizar o setor [mysqld] e acrescentar a linha
+skip-grant-table
 
 ctrl + X
 Y
@@ -39,5 +32,24 @@ ctrl+D para sair do console do container
 docker stop mariadb
 dockar start mariadb
 
-mysql -h 172.17.0.2 -P 3306 --protocol=TCP -u root -p
+
+docker exec -it mariadb bash
+mysql -u root -p
+digitar e senha <enter>
+
+create database <nome>;
+
+
+//criar rede docker
+docker network create dbnet
+docker network connect dbnet mariadb
+
+
+//exibir imagens instaladas
+docker images
+
+//Descobrir IP do container do mariadb
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb
+
+
 
