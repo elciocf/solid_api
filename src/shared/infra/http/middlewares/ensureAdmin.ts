@@ -4,17 +4,17 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "@shared/errors/AppError";
 
 export async function ensureAdmin(
-    request: Request,
-    response: Response,
-    next: NextFunction
+  request: Request,
+  response: Response,
+  next: NextFunction
 ) {
-    const { id } = request.user;
-    const usersRepository = new UsersRepository();
+  const { id } = request.user;
+  const usersRepository = new UsersRepository();
 
-    const user = await usersRepository.findById(id);
+  const user = await usersRepository.findById(id);
 
-    if (!user.isadmin) {
-        throw new AppError("User isn't admin");
-    }
-    next();
+  if (!user.isadmin) {
+    throw new AppError("User isn't admin");
+  }
+  next();
 }

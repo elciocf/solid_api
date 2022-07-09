@@ -5,41 +5,41 @@ import { verify } from "jsonwebtoken";
 import { AppError } from "@shared/errors/AppError";
 
 interface IPayload {
-    sub: string;
+  sub: string;
 }
 
 export async function ensureAuthenticate(
-    request: Request,
-    response: Response,
-    next: NextFunction
+  request: Request,
+  response: Response,
+  next: NextFunction
 ) {
-    const authHeader = request.headers.authorization;
+  const authHeader = request.headers.authorization;
 
-    if (!authHeader) {
-        throw new AppError("Token missing", 401);
+  if (!authHeader) {
+    throw new AppError("Token missing", 401);
+  }
+
+  const [, token] = authHeader.split(" ");
+
+  try {
+    const { sub: user_id } = verify(
+      token,
+      "2e8e264adbdddc1d7508e5afd31c2ece"
+    ) as IPayload;
+
+    const usersRepository = new UsersRepository();
+    const user = await usersRepository.findById(user_id);
+
+    if (!user) {
+      throw new AppError("User does not exists!", 401);
     }
 
-    const [, token] = authHeader.split(" ");
+    request.user = {
+      id: user.id,
+    };
 
-    try {
-        const { sub: user_id } = verify(
-            token,
-            "2e8e264adbdddc1d7508e5afd31c2ece"
-        ) as IPayload;
-
-        const usersRepository = new UsersRepository();
-        const user = await usersRepository.findById(user_id);
-
-        if (!user) {
-            throw new AppError("User does not exists!", 401);
-        }
-
-        request.user = {
-            id: user.id,
-        };
-
-        next();
-    } catch {
-        throw new AppError("Invalid Token", 401);
-    }
+    next();
+  } catch {
+    throw new AppError("Invalid Token", 401);
+  }
 }
