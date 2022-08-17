@@ -35,7 +35,7 @@
                         }
                     }
                 },
-                "response":{
+                "responses":{
                     "201":{
                         "description": "Created"
                     },
@@ -48,7 +48,7 @@
                 "tags": ["Category"], 
                 "summary": "List all categories",
                 "description": "List all categories",
-                "response":{
+                "responses":{
                     "200":{
                         "description": "Success",
                         "content":{
@@ -93,7 +93,7 @@
                         }
                     }
                 },
-                "response":{
+                "responses":{
                     "201":{
                         "description": "Created"
                     }
@@ -119,7 +119,7 @@
                         }
                     }
                 },
-                "response":{
+                "responses":{
                     "201":{
                         "description": "Created"
                     },
@@ -132,7 +132,7 @@
                 "tags": ["Specifications"], 
                 "summary": "List all specifications",
                 "description": "List all specifications",
-                "response":{
+                "responses":{
                     "200":{
                         "description": "Success",
                         "content":{
