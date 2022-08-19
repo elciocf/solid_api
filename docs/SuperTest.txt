@@ -1,0 +1,14 @@
+Ferramenta para testes de integração
+
+yarn add supertest @types/supertest -D
+
+
+Para utilizar criamos um   [nomeControler]Controller.spec.ts
+
+import request from "supertest";
+
+import { app } from "@shared/infra/http/app";
+
+describe("Create Category Controller", async () => {
+  await request(app).get("/cars/available").expect(200);
+});
