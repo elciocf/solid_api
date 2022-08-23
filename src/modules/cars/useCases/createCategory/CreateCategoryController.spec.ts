@@ -13,6 +13,8 @@ describe("Create Category Controller", () => {
     connection = await createConnection();
     await connection.runMigrations();
 
+    await connection.query(`delete from users`);
+
     const id = uuidV4();
     const password = await hash("admin", 8);
     await connection.query(
@@ -34,12 +36,15 @@ describe("Create Category Controller", () => {
     });
 
     const { token } = responseToken.body;
+    console.log("token", token);
+
+    await connection.query(`delete from categories`);
 
     const response = await request(app)
       .post("/categories")
       .send({
-        name: "Category SuperTest",
-        description: "Category SuperTest",
+        name: "Category New",
+        description: "Category New",
       })
       .set({
         Authorization: `Bearer ${token}`,
@@ -55,6 +60,18 @@ describe("Create Category Controller", () => {
     });
 
     const { token } = responseToken.body;
+    console.log("token", token);
+    await connection.query(`delete from categories`);
+
+    await request(app)
+      .post("/categories")
+      .send({
+        name: "Category SuperTest",
+        description: "Category SuperTest",
+      })
+      .set({
+        Authorization: `Bearer ${token}`,
+      });
 
     const response = await request(app)
       .post("/categories")
