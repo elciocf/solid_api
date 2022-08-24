@@ -25,6 +25,12 @@ class DayjsDateProvider implements IDateProvider {
       "days"
     );
   }
+
+  addDays(days: number): Date {
+    // const date = this.dateNow();
+    // return dayjs(this.convertToUTC(date)).add(days, "day").toDate();
+    return dayjs().add(days, "day").toDate();
+  }
 }
 
 export { DayjsDateProvider };
