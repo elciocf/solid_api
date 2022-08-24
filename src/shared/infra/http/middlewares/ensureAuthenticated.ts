@@ -43,6 +43,7 @@ export async function ensureAuthenticate(
       token,
       auth.secret_refresh_token
     ) as IPayload;
+
     const user = await usersTokensRepository.findByUserIdAndRefreshToken(
       user_id,
       token
@@ -53,7 +54,7 @@ export async function ensureAuthenticate(
     }
 
     request.user = {
-      id: user.id,
+      id: user.user_id,
     };
 
     next();

@@ -35,8 +35,7 @@ describe("Create Category Controller", () => {
       password: "admin",
     });
 
-    const { token } = responseToken.body;
-    console.log("token", token);
+    const { refresh_token } = responseToken.body;
 
     await connection.query(`delete from categories`);
 
@@ -47,7 +46,7 @@ describe("Create Category Controller", () => {
         description: "Category New",
       })
       .set({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${refresh_token}`,
       });
 
     expect(response.status).toBe(201);
@@ -59,8 +58,8 @@ describe("Create Category Controller", () => {
       password: "admin",
     });
 
-    const { token } = responseToken.body;
-    console.log("token", token);
+    const { refresh_token } = responseToken.body;
+
     await connection.query(`delete from categories`);
 
     await request(app)
@@ -70,7 +69,7 @@ describe("Create Category Controller", () => {
         description: "Category SuperTest",
       })
       .set({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${refresh_token}`,
       });
 
     const response = await request(app)
@@ -80,7 +79,7 @@ describe("Create Category Controller", () => {
         description: "Category SuperTest",
       })
       .set({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${refresh_token}`,
       });
 
     expect(response.status).toBe(400);
