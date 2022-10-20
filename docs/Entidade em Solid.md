@@ -10,8 +10,8 @@ Crie um arquivo para armazenar a interface da nova entidade com a nomenclatura I
 A interface descrita no arquivo deve refletir a entidade(tabela) correspondente no banco de dados
 
 Exemplo: ISpeakWithUsDTO
-
-<code>``
+ 
+<pre>
 interface ISpeakWithUsDTO {
     cod_fale_conosco: number;
     nome: string;
@@ -24,7 +24,8 @@ interface ISpeakWithUsDTO {
 }
 
 export { ISpeakWithUsDTO };
-``</code>
+</pre>
+
 
 ## Entities
 
@@ -34,7 +35,7 @@ Crie um arquio para armazenar a classe que representará a entidade. Primeira le
 
 Exemplo: SpeakWithUs
 
-
+<pre>
     class SpeakWithUs {
     cod_fale_conosco: number;
     nome: string;
@@ -54,6 +55,7 @@ Exemplo: SpeakWithUs
 }
 
 export { SpeakWithUs };
+</pre>
 
 ## Repositories
 
@@ -78,7 +80,7 @@ list: Retorna a lista de fale conosco
 Observe que quando uma ação não gera retorno utilizamos "Promise<void>" e quando gera retorno, descrevemos qual o tipo de retorno
 Promise<SpeakWithUs>. Caso o retorno seja um array Promise<SpeakWithUs[]>
 
-``
+<pre>
 import { ISpeakWithUsDTO } from "../dtos/ISpeakWithUsDTO";
 import { SpeakWithUs } from "../entities/SpeakWithUs";
 
@@ -90,7 +92,7 @@ interface ISpeakWithUsRepository {
     list(): Promise<SpeakWithUs[]>;
 }
 
-export { ISpeakWithUsRepository };``
+export { ISpeakWithUsRepository };</pre>
 
 ### Repository de memória
 O repositório de memória é criado para possibilitar a execução de teste unitários!    
@@ -104,7 +106,7 @@ Ficando NomeEmInglesRepositoryInMemory.ts
 Exemplo: SpeakWithUsRepositoryInMemory.ts
 
 Iniciamos com    
-``
+<pre>
 import { ISpeakWithUsDTO } from "@modules/site/dtos/ISpeakWithUsDTO";
 import { SpeakWithUs } from "@modules/site/entities/SpeakWithUs";
 
@@ -117,7 +119,7 @@ class SpeakWithUsRepositoryInMemory implements ISpeakWithUsRepository {
 }
 
 export { SpeakWithUsRepositoryInMemory };    
-``
+</pre>
     
 - Importamos a entitie e o DTO    
 - Criamos um array do tipo da entidade, para armazenas os registros em memória. No exemplo: "speakWithUsList"
@@ -128,7 +130,7 @@ export { SpeakWithUsRepositoryInMemory };
     
 Arquivo final
 
-``
+<pre>
 import { ISpeakWithUsDTO } from "@modules/site/dtos/ISpeakWithUsDTO";
 import { SpeakWithUs } from "@modules/site/entities/SpeakWithUs";
 
@@ -182,7 +184,7 @@ class SpeakWithUsRepositoryInMemory implements ISpeakWithUsRepository {
 
 export { SpeakWithUsRepositoryInMemory };
 
-``
+</pre>
     
 ### Repository do banco de dados "KNEX"
 O repositório de banco de dados é o que será utilizado para se comunicar diretamente com o banco de dados.
@@ -197,7 +199,7 @@ Ficando NomeEmInglesRepository.ts
 Exemplo: SpeakWithUsRepository.ts
 
 Iniciamos com    
-``
+<pre>
 import { db } from "@configs/mariadb";
 import { AppError } from "@shared/errors/AppError";
 import { ISpeakWithUsDTO } from "@modules/site/dtos/ISpeakWithUsDTO";
@@ -210,7 +212,7 @@ class SpeakWithUsRepository implements ISpeakWithUsRepository {
 }
     
 export { SpeakWithUsRepository }
-``
+</pre>
 - Note que importamos a comunicação com o banco de dados. No caso: import { db } from "@configs/mariadb"; 
 - Importamos também nossa biblioteca para tratamento de erros. import { AppError } from "@shared/errors/AppError";    
 - Importamos a entitie e o DTO    
@@ -220,7 +222,7 @@ export { SpeakWithUsRepository }
     
 Versão final
 
-``
+<pre>
 import { db } from "@configs/mariadb";
 import { ISpeakWithUsDTO } from "@modules/site/dtos/ISpeakWithUsDTO";
 import { SpeakWithUs } from "@modules/site/entities/SpeakWithUs";
@@ -277,7 +279,7 @@ class SpeakWithUsRepository implements ISpeakWithUsRepository {
 
 export { SpeakWithUsRepository };
 
-``
+</pre>
 ## Container
 Para conseguirmos alternar entre os repositórios inMemory e database real utilizamos o injection.
 Para facilitar o uso de injection utilizamos a biblioteca tsyringe.
@@ -285,12 +287,12 @@ Para facilitar o uso de injection utilizamos a biblioteca tsyringe.
 ### Adicionando container ao projeto
 No arquivo src/shared/container/index.ts. Iremos adicionar um bloco referente a nosso novo repositório:
     
-``
+<pre>
 container.registerSingleton<ISpeakWithUsRepository>(
     "SpeakWithUsRepository",
     SpeakWithUsRepository
 );
-``    
+</pre>    
 Fazemos os importes necessários com "ctrl + ."
 
     
@@ -308,7 +310,7 @@ Em cada pasta de useCase, criamos: o useCase o controller e se for o caso o test
 Arquivo que faz a conexão entre o controller(que será criado) e o repositório(memória ou banco de dados)
 
 Começamos com:
-``
+<pre>
 import { SpeakWithUs } from "@modules/site/entities/SpeakWithUs";
 import { ISpeakWithUsRepository } from "@modules/site/repositories/ISpeakWithUsRepository";
 import { inject, injectable } from "tsyringe";
@@ -323,12 +325,12 @@ class CreateSpeakWithUsUseCase {
 }
 
 export { CreateSpeakWithUsUseCase };    
-``
+</pre>
     
 Como iremos receber dados. Criamos uma interface que molda os dados recebidos pelo "Request"    
 Via de regra essa interface se chamará "IRequest"
     
-``
+<pre>
 interface IRequest {
     cod_fale_conosco: number;
     nome: string;
@@ -337,20 +339,20 @@ interface IRequest {
     cnpj: string;
     mensagem: string;
 }
-``
+</pre>
     
 Agora criamos o método que realiza a "ação"
 
-``
+<pre>
     async execute(data: IRequest): Promise<SpeakWithUs> {
         const newSpeakWithUs = await this.speakWithUsRepository.create(data);
         return newSpeakWithUs;
     }    
-``    
+</pre>  
 
 Versão final:
     
-``
+<pre>
 import { SpeakWithUs } from "@modules/site/entities/SpeakWithUs";
 import { ISpeakWithUsRepository } from "@modules/site/repositories/ISpeakWithUsRepository";
 import { inject, injectable } from "tsyringe";
@@ -378,8 +380,7 @@ class CreateSpeakWithUsUseCase {
 }
 
 export { CreateSpeakWithUsUseCase };
-    
-``   
+</pre>  
     
     
     
