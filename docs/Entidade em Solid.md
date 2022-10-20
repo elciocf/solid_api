@@ -11,7 +11,8 @@ A interface descrita no arquivo deve refletir a entidade(tabela) correspondente 
 
 Exemplo: ISpeakWithUsDTO
 
-``interface ISpeakWithUsDTO {
+``
+interface ISpeakWithUsDTO {
     cod_fale_conosco: number;
     nome: string;
     email: string;
