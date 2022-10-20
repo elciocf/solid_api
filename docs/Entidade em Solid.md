@@ -11,7 +11,7 @@ A interface descrita no arquivo deve refletir a entidade(tabela) correspondente 
 
 Exemplo: ISpeakWithUsDTO
 
-``
+<code>``
 interface ISpeakWithUsDTO {
     cod_fale_conosco: number;
     nome: string;
@@ -24,7 +24,7 @@ interface ISpeakWithUsDTO {
 }
 
 export { ISpeakWithUsDTO };
-``
+``</code>
 
 ## Entities
 
@@ -34,8 +34,8 @@ Crie um arquio para armazenar a classe que representará a entidade. Primeira le
 
 Exemplo: SpeakWithUs
 
-``
-class SpeakWithUs {
+
+    class SpeakWithUs {
     cod_fale_conosco: number;
     nome: string;
     email: string;
@@ -53,7 +53,7 @@ class SpeakWithUs {
     }
 }
 
-export { SpeakWithUs };``
+export { SpeakWithUs };
 
 ## Repositories
 
