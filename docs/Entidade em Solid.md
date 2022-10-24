@@ -13,12 +13,13 @@ Exemplo: ISpeakWithUsDTO
  
 <pre>
 interface ISpeakWithUsDTO {
-    cod_fale_conosco: number;
+    cod_fale_conosco?: number;
     nome: string;
     email: string;
     telefone: string;
     cnpj: string;
     mensagem: string;
+    lida?: string;
     created_at?: Date;
     updated_at?: Date;
 }
@@ -37,7 +38,7 @@ Exemplo: SpeakWithUs
 
 <pre>
     class SpeakWithUs {
-    cod_fale_conosco: number;
+    cod_fale_conosco?: number;
     nome: string;
     email: string;
     telefone: string;
@@ -332,7 +333,6 @@ Via de regra essa interface se chamará "IRequest"
     
 <pre>
 interface IRequest {
-    cod_fale_conosco: number;
     nome: string;
     email: string;
     telefone: string;
@@ -358,7 +358,6 @@ import { ISpeakWithUsRepository } from "@modules/site/repositories/ISpeakWithUsR
 import { inject, injectable } from "tsyringe";
 
 interface IRequest {
-    cod_fale_conosco: number;
     nome: string;
     email: string;
     telefone: string;
@@ -383,9 +382,69 @@ export { CreateSpeakWithUsUseCase };
 </pre>  
     
     
+### Controller
+
+O controller serve para obter os dados da requisição (GET, POST, PATH, DELETE)
+e transmití-los para o useCase e por fim enviar a resposta.
     
-    
-    
+<pre>
+import { Response, Request } from "express";
+import { container } from "tsyringe";
+
+import { CreateSpeakWithUsUseCase } from "./CreateSpeakWithUsUseCase";
+
+class CreateSpeakWithUsController {
+    async handle(request: Request, response: Response): Promise<Response> {
+        const { nome, email, telefone, cnpj, mensagem } = request.body;
+
+        const createSpeakWithUsUseCase = container.resolve(
+            CreateSpeakWithUsUseCase
+        );
+
+        const speakWithUs = await createSpeakWithUsUseCase.execute({
+            nome,
+            email,
+            telefone,
+            cnpj,
+            mensagem,
+        });
+        return response.status(201).json(speakWithUs);
+    }
+}
+
+export { CreateSpeakWithUsController };
+</pre>
+
+
+## Criando as rotas na API
+
+Em src/shared/http/routes criamos um arquivo para definir as rotas que interagem com nossa entidade.
+O arquivo segue o padrão nomeEntidade.routes.ts
+
+speakWithUs.routes.ts
+
+<pre>
+import { CreateSpeakWithUsController } from "@modules/site/useCases/speakWithUs/createSpeakWithUs/CreateSpeakWithUsController";
+import { Router } from "express";
+
+const createSpeakWithUsController = new CreateSpeakWithUsController();
+
+const speakWithUsRoutes = Router();
+
+speakWithUsRoutes.post("/", createSpeakWithUsController.handle);
+
+export { speakWithUsRoutes };
+
+</pre>
+
+
+Em src/shared/http/routes/index.ts adicionamos o arquivo de rotas 
+
+import { speakWithUsRoutes } from "./speakWithUs.routes";
+
+router.use("/speak", speakWithUsRoutes);
+
+
  
     
     
