@@ -13,12 +13,13 @@ docker update --restart always mariadb
 
 
 //Conectar no console do docker
-
+<pre>
 docker exec -it mariadb bash
 apt-get update
 apt-get install nano
 cd /etc/mysql/
 nano my.cnf
+</pre>
 
 
 ==>localizar o setor [mysqld] e acrescentar a linha
