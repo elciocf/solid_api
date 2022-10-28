@@ -13,6 +13,7 @@ docker update --restart always mariadb
 
 
 //Conectar no console do docker
+
 docker exec -it mariadb bash
 apt-get update
 apt-get install nano
