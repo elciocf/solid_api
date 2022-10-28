@@ -20,6 +20,7 @@ apt-get install nano
 cd /etc/mysql/
 nano my.cnf
 
+
 ==>localizar o setor [mysqld] e acrescentar a linha
 skip-grant-table
 
